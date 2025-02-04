@@ -3,7 +3,10 @@ import discord
 from discord.ext import commands
 
 # Set up the bot with a command prefix
+#intents
 intents = discord.Intents.default()
+intents.message_content = True  # Enable message content intent
+
 bot = commands.Bot(command_prefix='/', intents=intents)
 
 # Event to notify when the bot has connected
@@ -15,13 +18,6 @@ async def on_ready():
 @bot.command()
 async def hi(ctx):
     await ctx.send('Hi!')
-
-#intents
-intents = discord.Intents.default()
-intents.message_content = True  # Enable message content intent
-
-bot = commands.Bot(command_prefix='/', intents=intents)
-
 
 # Run the bot with your token
 discord_pass = os.getenv("DISSPASS")

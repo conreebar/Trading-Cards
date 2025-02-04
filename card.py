@@ -1,3 +1,4 @@
+import os
 import discord
 from discord.ext import commands
 
@@ -16,4 +17,5 @@ async def hi(ctx):
     await ctx.send('Hi!')
 
 # Run the bot with your token
-bot.run('YOUR_DISCORD_BOT_TOKEN')
+discord_pass = os.getenv("DISCORDPASS")
+bot.run(discord_pass)

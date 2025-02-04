@@ -16,6 +16,13 @@ async def on_ready():
 async def hi(ctx):
     await ctx.send('Hi!')
 
+#intents
+intents = discord.Intents.default()
+intents.message_content = True  # Enable message content intent
+
+bot = commands.Bot(command_prefix='/', intents=intents)
+
+
 # Run the bot with your token
-discord_pass = os.getenv("DISCORDPASS")
+discord_pass = os.getenv("DISSPASS")
 bot.run(discord_pass)

@@ -19,6 +19,10 @@ async def on_ready():
 async def hi(ctx):
     await ctx.send('Hi!')
 
+@bot.command()
+async def openCard(ctx):
+    await ctx.send('in progress')
+
 # Run the bot with your token
 discord_pass = os.getenv("DISSPASS")
 bot.run(discord_pass)

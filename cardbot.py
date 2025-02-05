@@ -1,7 +1,7 @@
 import os
 import discord
 from objects.Card import Card
-from dao import userDAO, cardDAO
+from dao import userDAO, cardDAO, cardUserDAO
 from discord.ext import commands
 
 # Set up the bot with a command prefix
@@ -37,7 +37,7 @@ async def hi(ctx):
     await ctx.send('Hi!')
 
 @bot.command()
-async def showCard(ctx, *,card_name:str):
+async def showCard(ctx, *, card_name:str):
     card_data = cardDAO.getCardByName(card_name)
     if card_data:
         card = Card(**card_data)
@@ -70,7 +70,32 @@ async def showRandomCard(ctx):
         card = Card(**card_data)
         print(card)
         await ctx.send(embed=Card.embedCard(card))
-    
+
+@bot.command()
+async def giveCardToUser(ctx, *, input_string: str):
+    try:
+        # Split input at the `|` character to separate user and card name
+        user_mention, card_name = input_string.split(" | ")
+
+        # Extract the user ID from the mention string by removing <@ and >
+        user_id = int(user_mention[2:-1])  # user_mention is in the format <@user_id>
+
+        ctx.send(f"user_id is {user_id}")
+
+        # Get card details from card name
+        card_data = cardDAO.getCardByName(card_name.strip())  # Assuming a function to get card data
+        
+        if card_data:
+            card_id = card_data['card_id']
+            cardUserDAO.assignCardToUser(user_id, card_id)  # Assign the card to the user in the database
+            await ctx.send(f"Card '{card_name.strip()}' has been successfully assigned to <@{user_id}>!")
+        else:
+            await ctx.send(f"No card found with the name '{card_name.strip()}'.")
+    except ValueError:
+        await ctx.send("Invalid input format. Please use `@username | card name`.")
+    except Exception as e:
+        await ctx.send(f"An error occurred: {str(e)}")
+
 
 # Run the bot with your token
 discord_pass = os.getenv("DISSPASS")

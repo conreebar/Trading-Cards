@@ -5,10 +5,8 @@ from dao import userDAO, cardDAO, cardUserDAO
 from discord.ext import commands
 
 # Set up the bot with a command prefix
-#intents
 intents = discord.Intents.default()
-intents.message_content = True  # Enable message content intent
-
+intents.message_content = True
 bot = commands.Bot(command_prefix='/', intents=intents)
 
 # Event to notify when the bot has connected
@@ -16,19 +14,11 @@ bot = commands.Bot(command_prefix='/', intents=intents)
 async def on_ready():
     print(f'Logged in as {bot.user}')
 
-    # Get the channel by name
     for guild in bot.guilds:
-        channel = discord.utils.get(guild.text_channels, name="general")  # Replace 'general' with your channel name
+        channel = discord.utils.get(guild.text_channels, name="general") 
         if channel:
             await channel.send('Hello, World!')
             break
-    # Sync commands
-    try:
-        # Sync the slash commands to Discord's servers
-        await bot.tree.sync()  # This syncs the commands globally
-        print('Slash commands synchronized successfully.')
-    except Exception as e:
-        print(f'Error syncing commands: {e}')
 
     
 # Command /hi
@@ -46,7 +36,7 @@ async def showCard(ctx, *, card_name:str):
 
 @bot.command()
 async def card(ctx):
-    user_id = ctx.author.id # grab user_id from user who submitted the command
+    user_id = ctx.author.id
     username = ctx.author.name
 
     #check if user has a database object, if not add one
@@ -55,10 +45,11 @@ async def card(ctx):
         print(f"User already exists: {user}")
     else:
         print(f"User not found. Creating a new user...")
-        userDAO.createUser(user_id)  # Create the user if not found
-    #check if user has drawn a card in the past 24 hours
+        userDAO.createUser(user_id)
 
-    #roll a random card and add to the account
+    #TODO check if user has drawn a card in the past 24 hours
+
+    #TODO roll a random card and add to the account
 
     await ctx.send(f'{user_id} and {username}')
 
@@ -78,11 +69,9 @@ async def giveCardToUser(ctx, *, input_string: str):
         user_mention, card_name = input_string.split(" | ")
 
         # Extract the user ID from the mention string by removing <@ and >
-        user_id = int(user_mention[2:-1])  # user_mention is in the format <@user_id>
+        user_id = int(user_mention[2:-1])
 
-        ctx.send(f"user_id is {user_id}")
-
-        # Get card details from card name
+        # get card_id
         card_data = cardDAO.getCardByName(card_name.strip())  # Assuming a function to get card data
         
         if card_data:
@@ -95,7 +84,6 @@ async def giveCardToUser(ctx, *, input_string: str):
         await ctx.send("Invalid input format. Please use `@username | card name`.")
     except Exception as e:
         await ctx.send(f"An error occurred: {str(e)}")
-
 
 # Run the bot with your token
 discord_pass = os.getenv("DISSPASS")

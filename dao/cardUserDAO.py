@@ -16,10 +16,10 @@ def assignCardToUser(card_id, user_id):
             
         except pymysql.MySQLError as err:
             print(f"Error while joining card to user: {err}")
-            return None  # Return None if there is an error
+            return None
         finally:
-            cursor.close()  # Always close the cursor
-            db.close()  # Close the database connection
+            cursor.close() 
+            db.close() 
 
     else:
         print("Failed to connect to the database.")

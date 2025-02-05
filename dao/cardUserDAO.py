@@ -2,6 +2,7 @@ from dao import database
 import pymysql
 
 def assignCardToUser(card_id, user_id):
+    print(f'{card_id},{user_id}')
     db = database.get_db_connection()
     if db:
         try:
@@ -23,3 +24,4 @@ def assignCardToUser(card_id, user_id):
     else:
         print("Failed to connect to the database.")
         return None
+    

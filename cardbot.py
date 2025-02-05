@@ -87,7 +87,7 @@ async def giveCardToUser(ctx, *, input_string: str):
         
         if card_data:
             card_id = card_data['card_id']
-            cardUserDAO.assignCardToUser(user_id, card_id)  # Assign the card to the user in the database
+            cardUserDAO.assignCardToUser(card_id, user_id)  # Assign the card to the user in the database
             await ctx.send(f"Card '{card_name.strip()}' has been successfully assigned to <@{user_id}>!")
         else:
             await ctx.send(f"No card found with the name '{card_name.strip()}'.")

@@ -41,4 +41,4 @@ def createUser(user_id):
             print(f"Error while adding user: {err}")
         finally:
             cursor.close()
-            db.close()  
+            db.close()

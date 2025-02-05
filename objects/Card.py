@@ -1,13 +1,15 @@
+import os
 import discord
 
 
 class Card:
-    def __init__(self, card_id, card_name, rarity, flavor_text, card_set):
+    def __init__(self, card_id, card_name, rarity, flavor_text, card_set, image_loc):
         self.card_id = card_id
         self.card_name = card_name
         self.rarity = rarity
         self.flavor_text = flavor_text
         self.card_set = card_set
+        self.image_loc = image_loc
 
     def __str__(self):
         return f"{self.card_name} ({self.rarity}): {self.flavor_text}"
@@ -31,6 +33,14 @@ class Card:
         embed = discord.Embed(
             title=self.card_name,
             description=self.flavor_text,
-            color=card_color
+            color=card_color,
         )
-        return embed
+
+        # Extract the image name from image_loc
+        if hasattr(self, 'image_loc') and self.image_loc:
+            image_name = os.path.basename(self.image_loc)  # e.g., "imageName.png"
+            file = discord.File(self.image_loc, filename=image_name)
+            embed.set_image(url=f"attachment://{image_name}")
+            return embed, file
+        else:
+            return embed, None

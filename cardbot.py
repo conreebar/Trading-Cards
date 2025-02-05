@@ -1,6 +1,7 @@
 import os
 import discord
 from objects.Card import Card
+from objects import CardUtils
 from dao import userDAO, cardDAO, cardUserDAO
 from discord.ext import commands
 
@@ -27,12 +28,21 @@ async def hi(ctx):
     await ctx.send('Hi!')
 
 @bot.command()
-async def showCard(ctx, *, card_name:str):
+async def showCard(ctx, *, card_name: str):
     card_data = cardDAO.getCardByName(card_name)
     if card_data:
         card = Card(**card_data)
         print(card)
-        await ctx.send(embed=Card.embedCard(card))
+
+        # Get the embed and the file from embedCard
+        embed, file = card.embedCard()
+
+        # Send the embed with the image if available
+        if file:
+            await ctx.send(embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed)
+
 
 @bot.command()
 async def card(ctx):
@@ -49,9 +59,26 @@ async def card(ctx):
 
     #TODO check if user has drawn a card in the past 24 hours
 
-    #TODO roll a random card and add to the account
+    #TODO roll 3 random cards and add to the account
 
-    await ctx.send(f'{user_id} and {username}')
+    card_rarity = CardUtils.rollRarity() # make a rarity
+    card_data = cardDAO.getRandomCardByRarity(card_rarity) #make a card from DAO
+    
+
+    # Convert the dictionary to a Card object
+    if card_data:
+        card = Card(**card_data)
+        cardUserDAO.assignCardToUser(card.getCardID(), user_id) #assign card
+        print(card)
+
+        #embed card
+        embed, file = card.embedCard()
+        #Show card
+        if file:
+            await ctx.send(embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed)
+    
 
 @bot.command()
 async def showRandomCard(ctx):

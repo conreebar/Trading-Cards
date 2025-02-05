@@ -1,5 +1,6 @@
 import os
 import discord
+from dao import cardDAO
 
 
 class Card:
@@ -14,6 +15,11 @@ class Card:
     def __str__(self):
         return f"{self.card_name} ({self.rarity}): {self.flavor_text}"
     
+    def getCardID(self):
+        return self.card_id
+
+    
+
     def rarityColor(self):
         if self.rarity == 'Common':
             return discord.Color.green()
@@ -35,10 +41,7 @@ class Card:
             description=self.flavor_text,
             color=card_color,
         )
-        return(embed)
 
-
-""""
         # Extract the image name from image_loc
         if hasattr(self, 'image_loc') and self.image_loc:
             image_name = os.path.basename(self.image_loc)  # e.g., "imageName.png"
@@ -46,4 +49,10 @@ class Card:
             embed.set_image(url=f"attachment://{image_name}")
             return embed, file
         else:
-            return embed, None"""
+            return embed, None
+
+        return(embed)
+
+
+
+        

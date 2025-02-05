@@ -31,6 +31,6 @@ class Card:
         embed = discord.Embed(
             title=self.card_name,
             description=self.flavor_text,
-            color=card_color  # You can choose any color
+            color=card_color
         )
         return embed

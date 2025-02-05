@@ -36,6 +36,13 @@ async def on_ready():
 async def hi(ctx):
     await ctx.send('Hi!')
 
+@bot.command()
+async def showCard(ctx, *,card_name:str):
+    card_data = cardDAO.getCardByName(card_name)
+    if card_data:
+        card = Card(**card_data)
+        print(card)
+        await ctx.send(embed=Card.embedCard(card))
 
 @bot.command()
 async def card(ctx):

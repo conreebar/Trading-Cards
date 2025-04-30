@@ -4,13 +4,14 @@ from dao import cardDAO
 
 
 class Card:
-    def __init__(self, card_id, card_name, rarity, flavor_text, card_set, image_loc):
+    def __init__(self, card_id, card_name, rarity, flavor_text, card_set, image_loc, is_collected_legend):
         self.card_id = card_id
         self.card_name = card_name
         self.rarity = rarity
         self.flavor_text = flavor_text
         self.card_set = card_set
         self.image_loc = image_loc
+        self.is_collected_legend = is_collected_legend
 
     def __str__(self):
         return f"{self.card_name} ({self.rarity}): {self.flavor_text}"

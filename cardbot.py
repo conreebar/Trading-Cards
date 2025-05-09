@@ -2,8 +2,9 @@ import os
 import discord
 from objects.Card import Card
 from objects import CardUtils
-from dao import userDAO, cardDAO, cardUserDAO
+from dao import aiDAO, userDAO, cardDAO, cardUserDAO
 from discord.ext import commands
+import openai
 
 # Set up the bot with a command prefix
 intents = discord.Intents.default()
@@ -18,7 +19,7 @@ async def on_ready():
     for guild in bot.guilds:
         channel = discord.utils.get(guild.text_channels, name="general") 
         if channel:
-            await channel.send('Hel lo, World!')
+            await channel.send(response.choices[0].message.content)
             break
 
     
@@ -78,7 +79,22 @@ async def card(ctx):
             await ctx.send(embed=embed, file=file)
         else:
             await ctx.send(embed=embed)
-    
+
+@bot.command()
+async def talk(ctx, *, message_to_ai):
+    talk_resp=openai.chat.completions.create(
+        model = "gpt-3.5-turbo",
+        messages=[{"role": "user", "content": message_to_ai}]
+    )
+    await ctx.send(talk_resp.choices[0].message.content)
+
+@bot.command()
+async def query(ctx, *, message_to_ai):
+    talk_resp=openai.chat.completions.create(
+        model = "gpt-3.5-turbo",
+        messages=[{"role": "user", "content": message_to_ai}]
+    )
+    return aiDAO.aiRunQuery(talk_resp)
 
 @bot.command()
 async def showRandomCard(ctx):
@@ -113,5 +129,14 @@ async def giveCardToUser(ctx, *, input_string: str):
         await ctx.send(f"An error occurred: {str(e)}")
 
 # Run the bot with your token
-discord_pass = os.getenv("DISSPASS")
+#discord_pass = os.getenv("DISSPASS")
+ai_pass = 1
+openai.api_key = ai_pass
+response=openai.chat.completions.create(
+    model = "gpt-3.5-turbo",
+    messages=[{"role": "user", "content": "This is your card bot, how are you?"}]
+)
+
+discord_pass = 1
+print(discord_pass)
 bot.run(discord_pass)

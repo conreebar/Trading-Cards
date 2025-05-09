@@ -18,7 +18,7 @@ async def on_ready():
     for guild in bot.guilds:
         channel = discord.utils.get(guild.text_channels, name="general") 
         if channel:
-            await channel.send('Hello, World!')
+            await channel.send('Hel lo, World!')
             break
 
     

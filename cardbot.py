@@ -94,7 +94,9 @@ async def query(ctx, *, message_to_ai):
         model = "gpt-3.5-turbo",
         messages=[{"role": "user", "content": message_to_ai}]
     )
-    return aiDAO.aiRunQuery(talk_resp)
+    talk_resp_query = talk_resp.choices[0].message.content
+    await ctx.send(talk_resp_query)
+    await ctx.send(aiDAO.aiRunQuery(talk_resp_query))
 
 @bot.command()
 async def showRandomCard(ctx):
@@ -130,13 +132,14 @@ async def giveCardToUser(ctx, *, input_string: str):
 
 # Run the bot with your token
 #discord_pass = os.getenv("DISSPASS")
+discord_pass = 1
 ai_pass = 1
 openai.api_key = ai_pass
 response=openai.chat.completions.create(
     model = "gpt-3.5-turbo",
-    messages=[{"role": "user", "content": "This is your card bot, how are you?"}]
+    messages=[{"role": "user", "content": "You are communicating with a discord server.  You type only in MySQL commands."}]
 )
 
-discord_pass = 1
+
 print(discord_pass)
 bot.run(discord_pass)

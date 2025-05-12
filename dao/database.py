@@ -9,7 +9,7 @@ def get_db_connection():
             port=3306,            
             user="root",
             password="2323",
-            database="mysql",
+            database="my_data",
             cursorclass=pymysql.cursors.DictCursor
     )
         print("Database connection successful!")

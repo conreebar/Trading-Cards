@@ -7,7 +7,7 @@ def aiRunQuery(query):
         try:
             cursor = db.cursor()
             cursor.execute(query)
-            result = cursor.fetchone()
+            result = cursor.fetchall()
             if result:
                 return result
             else:
